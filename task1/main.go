@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"task1/book"
 	"task1/idGenerators"
+
+	"task1/book"
 	"task1/library"
 	"task1/storage"
 )
@@ -22,8 +23,8 @@ func main() {
 		library.AddBook(book.Title, book.Author)
 	}
 
-	foundBook, ok := library.FindBookByName("Библия")
-	if !ok {
+	foundBook, err := library.FindBookByName("Библия")
+	if err != nil {
 		fmt.Println("Книга не найдена")
 	} else {
 		fmt.Printf("Найдена книга: %+v\n", foundBook)
@@ -33,8 +34,8 @@ func main() {
 
 	library.AddBook("Пособие по выживанию на стипу", "Неизвестный студент")
 
-	foundBook, ok = library.FindBookByName("Три мушкетера")
-	if !ok {
+	foundBook, err = library.FindBookByName("Три мушкетера")
+	if err != nil {
 		fmt.Println("Книга не найдена")
 	} else {
 		fmt.Printf("Найден книга: %+v\n", foundBook)
@@ -48,8 +49,8 @@ func main() {
 	}
 
 	for _, title := range []string{"Библия", "Вечера на хуторе близ Диканьки"} {
-		foundBook, ok = library.FindBookByName(title)
-		if !ok {
+		foundBook, err = library.FindBookByName(title)
+		if err != nil {
 			fmt.Println("Не нашел книгу")
 		} else {
 			fmt.Printf("Найдена книга: %+v\n", foundBook)

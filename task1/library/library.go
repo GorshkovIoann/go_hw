@@ -6,11 +6,8 @@ import (
 )
 
 type library interface {
-	findBookById(id int) (bool, book.Book)
-	findBookByAuthor(author string) (bool, book.Book)
-	putBook(title string, author string)
-	libraryRelocation()
-	setIdFunction()
+	AddBook(title, author string)
+	FindBookByName(name string) (*book.Book, error)
 }
 
 type Library struct {
@@ -31,6 +28,6 @@ func (l *Library) AddBook(title, author string) {
 	l.Storage.Add(book)
 }
 
-func (l *Library) FindBookByName(name string) (*book.Book, bool) {
+func (l *Library) FindBookByName(name string) (*book.Book, error) {
 	return l.Storage.SearchForBookByTitle(name)
 }
