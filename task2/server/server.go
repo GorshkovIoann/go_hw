@@ -11,12 +11,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type InputString struct {
-	InputString string `json:"inputString"`
+const port = "8080"
+
+type Request struct {
+	Body string `json:"inputString"`
 }
 
-type OutputString struct {
-	OutputString string `json:"outputString"`
+type Answer struct {
+	Body string `json:"outputString"`
 }
 
 type Server struct {
@@ -37,7 +39,7 @@ func NewServer() *Server {
 }
 
 func (srv *Server) Start() {
-	http.ListenAndServe(":8080", srv.router)
+	http.ListenAndServe( fmt.Sprintf(":%s",port), srv.router)
 }
 
 func getVersionHandler() http.HandlerFunc {
@@ -53,19 +55,19 @@ func decodeHandler() http.HandlerFunc {
 			return
 		}
 
-		var in InputString
+		var in Request
 		if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		decoded, err := base64.StdEncoding.DecodeString(in.InputString)
+		decoded, err := base64.StdEncoding.DecodeString(in.Body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		resp := OutputString{OutputString: string(decoded)}
+		resp := Answer{Body: string(decoded)}
 		json.NewEncoder(w).Encode(resp)
 	}
 }

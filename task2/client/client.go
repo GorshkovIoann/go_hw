@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-type InputString struct {
-	InputString string `json:"inputString"`
+type Request struct {
+	Body string `json:"inputString"`
 }
 
-type OutputString struct {
-	OutputString string `json:"outputString"`
+type Answer struct {
+	Body string `json:"outputString"`
 }
 
 type Client struct {
@@ -59,10 +59,16 @@ func (c *Client) SendRequests() error {
 		}
 		switch url {
 		case "/version":
-			body, _ := io.ReadAll(resp.Body)
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return err
+			}
 			log.Printf("Received version: %s", body)
 		case "/decode":
-			body, _ := io.ReadAll(resp.Body)
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return err
+			}
 			var result map[string]string
 			json.Unmarshal(body, &result)
 			log.Printf("Decoded string: %s", result["outputString"])
@@ -117,7 +123,7 @@ func (c *Client) GetHardOp() (int, error) {
 }
 
 func (c *Client) PostDecode(inputString string) (string, error) {
-	reqBody, err := json.Marshal(InputString{InputString: inputString})
+	reqBody, err := json.Marshal(Request{Body: inputString})
 	if err != nil {
 		return "", err
 	}
@@ -140,11 +146,11 @@ func (c *Client) PostDecode(inputString string) (string, error) {
 		return "", err
 	}
 
-	var decoded OutputString
+	var decoded Answer
 	err = json.Unmarshal(body, &decoded)
 	if err != nil {
 		return "", err
 	}
 
-	return decoded.OutputString, nil
+	return decoded.Body, nil
 }
