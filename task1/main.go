@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"task1/idGenerators"
+	"idGenerators"
 
 	"task1/book"
 	"task1/library"

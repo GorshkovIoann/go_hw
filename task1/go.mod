@@ -1,4 +1,4 @@
-module task1
+module go_hw/task1
 
 go 1.23.0
 
